@@ -6,6 +6,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.userCanStreamWebcam =
+      navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
     this.videoRef = React.createRef();
     this.canvasRef = React.createRef();
     this.state = {
@@ -15,7 +17,7 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
-    if (this.userCanStreamWebcam()) {
+    if (this.userCanStreamWebcam) {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
@@ -32,9 +34,6 @@ export default class App extends React.Component {
       };
     }
   }
-
-  userCanStreamWebcam = () =>
-    navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
 
   detectObjectsFromFrame = async (video, model) => {
     const objects = await model.detect(video);
